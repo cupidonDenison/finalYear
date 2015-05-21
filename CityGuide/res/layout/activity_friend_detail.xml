@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+     >
+ 
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@null"
+            android:padding="1dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_profile" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="286dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/profileImage"
+            android:layout_below="@+id/profileImage"
+            android:layout_marginTop="14dp"
+            android:textSize="18sp"
+            android:drawableEnd="@drawable/ic_action_call"
+            android:text="Make a call to : " />
+
+        <TextView
+            android:id="@+id/tvnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView1"
+            android:layout_below="@+id/textView1"
+            android:layout_marginTop="15dp"
+            android:ems="10"
+            android:hint="Phone Number"
+            android:gravity="center_vertical"
+            android:paddingBottom="8dp"
+            android:paddingLeft="6dp"
+            android:paddingTop="6dp"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvnumber"
+            android:layout_alignRight="@+id/textView1"
+            android:layout_below="@+id/tvnumber"
+            android:text="Send Meeting Request" />
+
+</RelativeLayout>
