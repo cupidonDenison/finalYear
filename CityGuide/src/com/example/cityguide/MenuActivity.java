@@ -16,11 +16,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.cityguide.entity.Place;
 import com.example.cityguide.others.CustomList;
 import com.example.cityguide.others.JSONParser;
-import com.example.cityguide.R;
 
 public class MenuActivity extends DrawerActivity {
 
@@ -53,7 +53,7 @@ public class MenuActivity extends DrawerActivity {
 	//	Log.i("response type", type);
 		menuList = (ListView) findViewById(R.id.listView1);
 		
-		places = HomeActivity.placesList;
+		places = SplashScreen.getAllPlaces();
 		menuList.setAdapter(new CustomList(MenuActivity.this, places,locationmanger));
 		
 		menuList.setOnItemClickListener(new OnItemClickListener() {
@@ -62,11 +62,11 @@ public class MenuActivity extends DrawerActivity {
 					long id) {
 				Object o = menuList.getItemAtPosition(position);
 				Place obj_itemDetails = (Place) o;
-				/*Toast.makeText(
+				Toast.makeText(
 						MenuActivity.this,
 						"You have chosen : " + " "
-								+ obj_itemDetails.getItemName(),
-						Toast.LENGTH_LONG).show();*/
+								+ obj_itemDetails.getName(),
+						Toast.LENGTH_LONG).show();
 
 				Intent intent = new Intent(MenuActivity.this,
 						MenuDetailsActivity.class);
@@ -95,24 +95,6 @@ public class MenuActivity extends DrawerActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	//Async task to retrieve xml document from google api
-	class GoogleMapDoc extends AsyncTask<Void, Void, Void>{
-
-		@Override
-		protected Void doInBackground(Void... arg0) {
-			//mapDoc = parser.getDocument(myLatLng, placeLatLng, "");
-			
-			return null;
-		}
-		
-		@Override
-		protected void onPostExecute(Void result) {
-			if(mapDoc !=null){
-				
-				 Log.i("DistanceValue","xml doc is null");
-			}
-		}
-	}//end GoogleMapDoc
 	
 
 	

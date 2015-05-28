@@ -1,0 +1,158 @@
+package com.example.cityguide.callbackinterface;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import com.example.cityguide.SplashScreen;
+import com.example.cityguide.communication.JSONParser;
+import com.example.cityguide.entity.Place;
+
+public class PlaceResponseManager {
+
+	private static String PLACE_TYPE;
+	private final String PLACE_REPONSE_MANAGER_TAG = "place_response_manager";
+	private static PlaceResponseListener responseListener;
+
+	public static void getPlaces(Context context, String type,
+			PlaceResponseListener responseListener) {
+		PlaceResponseManager.responseListener = responseListener;
+		PLACE_TYPE = type;
+
+		new PlaceResponseManager().new  PlacesAsync().execute();
+	}// End getAllPlaces()
+	
+	//---end function
+
+	class PlacesAsync extends AsyncTask<Void, Void, Void> {
+		JSONParser parser = new JSONParser();
+		JSONObject responseObj;
+		int responseCount;
+		ArrayList<Place> placeList = new ArrayList<Place>();
+
+		String placeUrl = SplashScreen.SERVER_IP + "project/getPlacesType.php";
+
+		public boolean isOnline() {
+			ConnectivityManager cm = (ConnectivityManager) SplashActivity.appContext
+					.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo netInfo = cm.getActiveNetworkInfo();
+			return netInfo != null && netInfo.isConnectedOrConnecting();
+		}
+
+		@Override
+		protected Void doInBackground(Void... pr) {
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("type", PLACE_TYPE));
+			params.add(new BasicNameValuePair("startLat",
+					SplashActivity.myLocation.getLatitude() + ""));
+			params.add(new BasicNameValuePair("startLong",
+					SplashActivity.myLocation.getLongitude() + ""));
+
+			responseObj = parser.makeHttpRequest(placeUrl, "POST", params);
+
+			Log.i(PLACE_REPONSE_MANAGER_TAG, "lat: "
+					+ SplashActivity.myLocation.getLatitude());
+
+			if (isOnline()) {
+
+				Log.i("Response Type", PLACE_TYPE);
+				Log.i("Response object", responseObj.toString());
+
+				try {
+					responseCount = responseObj.getInt("count");
+
+					String responseStatus = responseObj.getString("status");
+
+					Log.i("Response status : ", responseStatus);
+					Log.i("response count", String.valueOf(responseCount));
+				} catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				try {
+					if (responseCount > 0) {
+						JSONArray placesArray = responseObj
+								.getJSONArray("places");
+						for (int i = 0; i < responseCount; i++) {
+							JSONObject obj = placesArray.getJSONObject(i);
+
+							// getting all information about a place
+							String id = obj.getString("place_id");
+							String icon = obj.getString("icon");
+							String name = obj.getString("name");
+							double latitude = obj.getDouble("latitude");
+							double longitude = obj.getDouble("longitude");
+
+							JSONArray typeArray = obj.getJSONArray("types")
+									.getJSONArray(0);
+
+							ArrayList<String> typesArrayList = new ArrayList<String>();
+
+							for (int j = 0; j < typeArray.length(); j++) {
+								String placeType = typeArray.getString(j);
+								if (!(placeType.equals("establishment"))) {
+									typesArrayList.add(placeType);
+								}
+							}// end for loop
+
+							// creating new object of the class Place
+							Place newPlace = new Place(id, name, latitude,
+									longitude, typesArrayList);
+
+							List<NameValuePair> p = new ArrayList<NameValuePair>();
+							p.add(new BasicNameValuePair("startLat",
+									SplashActivity.myLocation.getLatitude()
+											+ ""));
+							p.add(new BasicNameValuePair("startLong",
+									SplashActivity.myLocation.getLongitude()
+											+ ""));
+							p.add(new BasicNameValuePair("endLat", latitude
+									+ ""));
+							p.add(new BasicNameValuePair("endLong", longitude
+									+ ""));
+
+							JSONObject object = parser.makeHttpRequest(
+									SplashActivity.SERVER_IP
+											+ "/getLocationDetails.php",
+									"POST", p);
+
+							String dist = object.getString("distance");
+							// Calculating distance between user and the place
+							newPlace.setDistance(Double.parseDouble(String
+									.format("%.2f",
+											Double.parseDouble(dist) / 1000)));
+
+							placeList.add(newPlace);
+							
+							Log.i("response placeList","size: "+placeList.size());
+							
+
+						}// end loop in placeArray
+						responseListener.getPlace(placeList);
+					}// End if responseCount > 0
+				}// End try
+
+				catch (Exception e) {
+
+				}// End catch
+
+			}// End if isOnline
+
+			return null;
+		}//ENd doInBackground()
+
+	}// End AsyncTask
+
+}// End class

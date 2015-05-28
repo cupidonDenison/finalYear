@@ -22,6 +22,7 @@ public class MainMenu extends FragmentActivity implements ActionBar.TabListener 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.i("main_menu", "main menu started");
 		setContentView(R.layout.activity_main_menu);
 		viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();

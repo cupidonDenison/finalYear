@@ -1,0 +1,9 @@
+package callInterface;
+
+public class MyMathCaller {
+	
+	public void calculate(int n1,int n2,MyMath myMath){
+		myMath.sum(n1, n2);
+	}
+
+}

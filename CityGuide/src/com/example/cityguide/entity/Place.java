@@ -2,45 +2,36 @@ package com.example.cityguide.entity;
 
 import java.util.ArrayList;
 
-import android.graphics.Bitmap;
-
 public class Place {
-	String placeId;
-	String category;
-	ArrayList<String> types;
-	public ArrayList<String> getTypes() {
-		return types;
-	}
-
-
-
-	public void setTypes(ArrayList<String> types) {
-		this.types = types;
-	}
-	String name;
-	String icon;
-	double latitude;
-	double longitude;
-	Bitmap image;
-	double distance;
+	private String placeId,name;
+	private double latitude,longitude;
+	private ArrayList<String> placeType;
+	private double distance;
 	
 	
 	
 	
-	public Place(String placeId, String category, String name,String icon, double latitude,
-			double longitude) {
+	public Place(String placeId, String name, double latitude,
+			double longitude, ArrayList<String> placeType) {
 		super();
-		//types = new ArrayList<String>();
 		this.placeId = placeId;
-		this.category = category;
 		this.name = name;
 		this.latitude = latitude;
 		this.longitude = longitude;
-		this.icon =icon;
+		this.placeType = placeType;
 	}
 	
 	
 	
+	public Place() {
+		super();
+		
+	}
+
+
+	
+	
+
 	public double getDistance() {
 		return distance;
 	}
@@ -53,23 +44,11 @@ public class Place {
 
 
 
-	public Bitmap getImage() {
-		return image;
-	}
-	public void setImage(Bitmap image) {
-		this.image = image;
-	}
-	public String getPlcaeId() {
+	public String getPlaceId() {
 		return placeId;
 	}
-	public void setPlcaeId(String plcaeId) {
-		this.placeId = plcaeId;
-	}
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
+	public void setPlaceId(String placeId) {
+		this.placeId = placeId;
 	}
 	public String getName() {
 		return name;
@@ -77,32 +56,6 @@ public class Place {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
-	public String getPlaceId() {
-		return placeId;
-	}
-
-
-
-	public void setPlaceId(String placeId) {
-		this.placeId = placeId;
-	}
-
-
-
-	public String getIcon() {
-		return icon;
-	}
-
-
-
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
-
-
-
 	public double getLatitude() {
 		return latitude;
 	}
@@ -115,8 +68,22 @@ public class Place {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
+	public ArrayList<String> getPlaceType() {
+		return placeType;
+	}
+	public void setPlaceType(ArrayList<String> placeType) {
+		this.placeType = placeType;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Place [placeId=" + placeId + ", name=" + name + ", latitude="
+				+ latitude + ", longitude=" + longitude + ", placeType="
+				+ placeType + ", distance=" + distance + "]";
+	}
 	
-	 
 	
 	
 	

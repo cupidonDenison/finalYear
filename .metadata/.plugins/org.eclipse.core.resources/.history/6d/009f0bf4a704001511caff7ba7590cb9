@@ -1,0 +1,11 @@
+package callInterface;
+
+public class MyMathImp implements MyMath {
+
+	@Override
+	public void sum(int num1, int num2) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
