@@ -42,7 +42,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class HomeActivity extends DrawerActivity implements LocationListener {
+public class HomeActivity extends DrawerActivity {
 
 	GridView Grid;
 	ArrayList<GridImage> gridArray = new ArrayList<GridImage>();
@@ -75,6 +75,7 @@ public class HomeActivity extends DrawerActivity implements LocationListener {
 				   new ColorDrawable(getResources().getColor(android.R.color.transparent)));*/ 
 		ImageView view = (ImageView) findViewById(android.R.id.home);
 		view.setPadding(5, 0, 2, 0); // left, top, right, bottom
+		Log.i("Home_activity", "Home activity started");
 
 		Grid = (GridView) findViewById(R.id.gridView);
 
@@ -85,27 +86,7 @@ public class HomeActivity extends DrawerActivity implements LocationListener {
 		gridArray.add(new GridImage(R.drawable.ic_restaurant, "Restaurant"));
 		gridArray.add(new GridImage(R.drawable.ic_tourist, "Tourist Place"));
 
-		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-		provider = this.locationManager.getBestProvider(criteria, true);
-
-		while (myLoc == null) {
-			locationManager.requestLocationUpdates(
-					LocationManager.GPS_PROVIDER, 2000, 10, this);
-			myLoc = locationManager.getLastKnownLocation(provider);
-
-			if (myLoc != null) {
-				double myLat = myLoc.getLatitude();
-				double myLon = myLoc.getLongitude();
-				// myLoc = loc.getLocation();
-				Log.i("Current location ", "" + myLat + ", "
-						+ myLon);
-
-				myLatLng = new LatLng(myLat, myLon);
-				locationManager.removeUpdates(this);
-			}
-		}
-
+		
 		GridViewAdapter = new GridAdapter();
 		Grid.setAdapter(GridViewAdapter);
 		Grid.setOnItemClickListener(new OnItemClickListener() {
@@ -161,7 +142,8 @@ public class HomeActivity extends DrawerActivity implements LocationListener {
 				Intent intent = new Intent(getApplicationContext(), PeopleActivity.class);
 				startActivity(intent);
 			}else{
-				new places().execute();
+				Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+				startActivity(intent);
 			}
 			
 
@@ -173,13 +155,7 @@ public class HomeActivity extends DrawerActivity implements LocationListener {
 
 	}// end onGridViewClick()
 
-	private void setPlaces(List<Place> newList) {
-		this.placesList = newList;
-	}// end SetPlaces()
-
-	public static List<Place> getPlaces() {
-		return placesList;
-	}// end getPlaces
+	
 
 	// check for internet connection
 	public boolean isOnline() {
@@ -192,168 +168,5 @@ public class HomeActivity extends DrawerActivity implements LocationListener {
 		return type;
 	}
 
-	class places extends AsyncTask<Void, Void, Void> {
-
-		@Override
-		protected void onPreExecute() {
-			pDialog = new ProgressDialog(HomeActivity.this);
-			pDialog.setMessage("Loading " + type + ".....");
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(false);
-			pDialog.show();
-		}// end onPreExcute()
-
-		@Override
-		protected Void doInBackground(Void... arg0) {
-			
-			try{
-				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("type", type));
-				params.add(new BasicNameValuePair("startLat", myLoc.getLatitude() + ""));
-				params.add(new BasicNameValuePair("startLong", myLoc.getLongitude() + ""));
-				
-				responseObj = parser.makeHttpRequest(placesURL, "POST", params);
-				
-				try {
-					if (isOnline()) {
-						
-						Log.i("Response Type", type);
-						Log.i("Response object", responseObj.toString());
-
-						responseCount = responseObj.getInt("count");					
-						String responseStatus = responseObj.getString("status");
-					
-						Log.i("Response status : ", responseStatus);					
-						Log.i("response count", String.valueOf(responseCount));
-						
-						//	check number of places available			
-						if (responseCount > 0) {						
-							JSONArray placesArray = responseObj.getJSONArray("places");						
-							connectionOK = true;
-							
-							try{					
-								for (int i = 0; i < responseCount; i++) {										
-									JSONObject obj = placesArray.getJSONObject(i);	
-									
-									//getting all information about a place
-									String id = obj.getString("place_id");							
-									String icon = obj.getString("icon");						
-									String name = obj.getString("name");							
-									double latitude = obj.getDouble("latitude");							
-									double longitude = obj.getDouble("longitude");
-									
-									JSONArray typeArray = obj.getJSONArray("types").getJSONArray(0);
-													
-									ArrayList<String> typesArrayList = new ArrayList<String>();
-
-									for (int j = 0; j < typeArray.length(); j++) {
-										String placeType = typeArray.getString(j);									
-										if (!(placeType.equals("establishment"))) {
-											typesArrayList.add(placeType);																										
-										}						
-									}// end for loop
-									
-									//creating new object of the class Place									
-									Place newPlace = new Place(id, type, name, icon,latitude, longitude);
-									newPlace.setTypes(typesArrayList);
-							
-									// get place image from server						
-									String imageURL = newPlace.getIcon();							
-									Bitmap image = parser.getImage(imageURL);
-														
-									if (image == null)								
-										Log.i("response image", "image is null");
-									
-									newPlace.setImage(image);
-									
-									List<NameValuePair> pr = new ArrayList<NameValuePair>();
-									pr.add(new BasicNameValuePair("startLat", myLoc								
-											.getLatitude() + ""));
-									pr.add(new BasicNameValuePair("startLong", myLoc
-									.getLongitude() + ""));								
-									pr.add(new BasicNameValuePair("endLat", latitude
-									+ ""));
-									pr.add(new BasicNameValuePair("endLong", longitude
-									+ ""));
-									
-									JSONObject object = parser.makeHttpRequest(SplashScreen.SERVER_IP
-											+ "project/getLocationDetails.php","POST", pr);
-													
-									String dist = object.getString("distance");
-									// Calculating distance between user and the place
-									newPlace.setDistance(Double.parseDouble(String
-											.format("%.2f",Double.parseDouble(dist) / 1000)));
-									
-									placesList.add(newPlace);								
-								}// end loop in placeArray															
-							}
-							
-							catch(Exception e){
-								connectionOK = false;								
-							}
-					}// End if statement if no data corresponding to type is found in database										
-					}// end if error in connection									
-				} catch (JSONException e) {
-					e.printStackTrace();				
-				}// end try-catch statement
-				
-			}catch(Exception e){
-				connectionOK =false;
-			}			
-			return null;
-		}// end doInBackground()
-
-		@Override
-		protected void onPostExecute(Void result) {
-			
-			pDialog.dismiss();			
-			if (connectionOK) {				
-				if (placesList.size() > 0) {
-					for (Place place : placesList) {
-						double placelat = place.getLatitude();
-						double placelon = place.getLongitude();
-						
-						placeLatLng = new LatLng(placelat, placelat);
-						Location placeLoc = new Location("");
-						placeLoc.setLatitude(placelat);
-						placeLoc.setLongitude(placelon);											
-					}// end for loop
-					
-					Intent categoryIntent = new Intent(HomeActivity.this,MenuActivity.class);
-					categoryIntent.putExtra("Type", type);
-					startActivity(categoryIntent);				
-				} else {
-					Toast.makeText(getApplicationContext(),
-							"No result found for : " + type, Toast.LENGTH_LONG)
-							.show();					
-				}// No REcord				
-			}// End if statement if no data corresponding to type is found in database
-			
-			else {				
-				Toast.makeText(getApplicationContext(),
-						"Unable to connect to Server ",Toast.LENGTH_LONG).show();				
-			}// end else check for connection
-			responseObj = null;
-		}// end onPostExecute()
-	}// end AsyncTask
-
-	@Override
-	public void onLocationChanged(Location location) {
-		myLoc = location;
-	}
-
-	@Override
-	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-	}
+	
 }// End Activity

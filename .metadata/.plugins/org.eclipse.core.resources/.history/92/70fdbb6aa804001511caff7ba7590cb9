@@ -1,0 +1,9 @@
+package callInterface;
+
+public class MyMathCaller {
+	
+	public void calculate(MyMath mnyMath){
+		
+	}
+
+}

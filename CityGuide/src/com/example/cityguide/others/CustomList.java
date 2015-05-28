@@ -83,7 +83,7 @@ public class CustomList extends BaseAdapter {
 		
 		Place currentPlace = list.get(position);
 		
-		ArrayList<String> typeList = currentPlace.getTypes();
+		ArrayList<String> typeList = currentPlace.getPlaceType();
 		String typeStr ="";
 		int typeSize = typeList.size();
 		for(int i =0;i<4;i++){
@@ -97,11 +97,11 @@ public class CustomList extends BaseAdapter {
 		StringBuilder sb = new StringBuilder(typeStr);
 		sb.deleteCharAt(commaIndex);
 		typeStr = sb.toString();
-		Bitmap image = currentPlace.getImage();
-		image = Bitmap.createScaledBitmap(image, 70	, 70, false);
+		//Bitmap image = currentPlace.getImage();
+		//image = Bitmap.createScaledBitmap(image, 70	, 70, false);
 		holder.txt_descr.setText(typeStr);
 		holder.txt_itemLocation.setText(currentPlace.getDistance() + " KM");
-		holder.itemImage.setImageBitmap(image);
+		//holder.itemImage.setImageBitmap(image);
 		//holder.itemImage.setImageResource(R.drawable.kfc);
 		
 		return convertView;
