@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="android.graphics.drawable.ColorDrawable"/>
-<fullyQualifiedTypeName name="com.example.track_me.R.drawable"/>
-<fullyQualifiedTypeName name="com.example.track_me.others.LocationTracker"/>
-<fullyQualifiedTypeName name="com.example.track_me.R"/>
-<fullyQualifiedTypeName name="com.example.track_me.R.id"/>
-<fullyQualifiedTypeName name="com.example.cityguide.others.HelpAdapter"/>
-<fullyQualifiedTypeName name="com.example.cityguide.others.DatabaseHandler"/>
-<fullyQualifiedTypeName name="com.example.cityguide.entity.Favorites"/>
 <fullyQualifiedTypeName name="android.widget.ListView"/>
 <fullyQualifiedTypeName name="android.R.layout"/>
 <fullyQualifiedTypeName name="com.example.cityguide.others.CustomList"/>
@@ -51,8 +43,6 @@
 <fullyQualifiedTypeName name="android.database.sqlite.SQLiteDatabase"/>
 <fullyQualifiedTypeName name="android.content.ContentValues"/>
 <fullyQualifiedTypeName name="android.database.Cursor"/>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="android.util.Log"/>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="android.widget.EditText"/>
 <fullyQualifiedTypeName name="com.example.sqliteexample.R.id"/>
@@ -60,4 +50,14 @@
 <fullyQualifiedTypeName name="callInterface.MyMathCaller"/>
 <fullyQualifiedTypeName name="callInterface.MyMathImp"/>
 <fullyQualifiedTypeName name="callInterface.MyMath"/>
+<fullyQualifiedTypeName name="com.example.cityguide.communication.JSONParser"/>
+<fullyQualifiedTypeName name="com.example.cityguide.location.MyLocation"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.lang.Exception"/>
+<fullyQualifiedTypeName name="android.widget.RelativeLayout"/>
+<fullyQualifiedTypeName name="com.example.cityguide.HomeActivity"/>
+<fullyQualifiedTypeName name="com.example.cityguide.SplashScreen"/>
+<fullyQualifiedTypeName name="com.example.cityguide.MenuActivity"/>
+<fullyQualifiedTypeName name="com.example.cityguide.RegistrationActivity"/>
 </qualifiedTypeNameHistroy>
