@@ -1,0 +1,11 @@
+package com.example.cityguide.utils;
+
+import com.j256.ormlite.android.apptools.OrmLiteConfigUtil;
+
+public class OrmDBconfigUtils extends OrmLiteConfigUtil {
+	
+	public static void main(String args[]){
+		
+	}
+
+}//end class

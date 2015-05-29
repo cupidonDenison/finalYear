@@ -1,0 +1,11 @@
+package com.example.cityguide.callbackinterface;
+
+public class ProfileImpl implements ProfileInterface {
+
+	@Override
+	public void checkRegistration(String registrationStatus) {
+	
+
+	}
+
+}//end class profile implementation

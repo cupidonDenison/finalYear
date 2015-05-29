@@ -20,9 +20,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.cityguide.communication.JSONParser;
+import com.example.cityguide.location.LocationTracker;
 import com.example.cityguide.others.Connector;
-import com.example.cityguide.others.JSONParser;
-import com.example.cityguide.others.LocationTracker;
 import com.example.cityguide.R;
 
 

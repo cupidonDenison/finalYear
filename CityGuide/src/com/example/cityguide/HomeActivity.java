@@ -10,10 +10,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 
+import com.example.cityguide.communication.JSONParser;
+import com.example.cityguide.entity.GridImage;
 import com.example.cityguide.entity.Place;
-import com.example.cityguide.others.GridImage;
-import com.example.cityguide.others.JSONParser;
-import com.example.cityguide.others.MyLocation;
+import com.example.cityguide.location.MyLocation;
 import com.example.cityguide.R;
 
 import android.app.ProgressDialog;
@@ -57,11 +57,7 @@ public class HomeActivity extends DrawerActivity {
 	JSONParser parser = new JSONParser();
 	private static final String placesURL = SplashScreen.SERVER_IP+ "project/getPlacesType.php";
 	
-	LocationManager locationManager;
-
-	LatLng myLatLng, placeLatLng;
-	MyLocation loc;
-	Location myLoc;
+	
 
 	Document mapDoc;
 	String provider;

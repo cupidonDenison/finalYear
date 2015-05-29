@@ -8,7 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.cityguide.others.JSONParser;
+import com.example.cityguide.communication.JSONParser;
 import com.example.cityguide.R;
 
 import android.app.Activity;
@@ -185,7 +185,7 @@ public class RegistrationActivity extends Activity {
 			if (result.equals("true")) {
 				//Log.i("Number result t ", result);
 				SharedPreferences numberPref = getSharedPreferences(
-						"number",
+						"profile",
 						Context.MODE_PRIVATE);
 				
 				SharedPreferences.Editor preferencesEditor = numberPref.edit();

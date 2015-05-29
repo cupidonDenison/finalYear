@@ -34,10 +34,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cityguide.communication.JSONParser;
 import com.example.cityguide.entity.Contact;
-import com.example.cityguide.others.ContactManager;
+import com.example.cityguide.managerpackage.ContactManager;
 import com.example.cityguide.others.Friends;
-import com.example.cityguide.others.JSONParser;
 import com.example.cityguide.R;
 
 public class PeopleActivity extends DrawerActivity {

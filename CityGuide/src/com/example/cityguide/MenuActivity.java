@@ -1,5 +1,6 @@
 package com.example.cityguide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.w3c.dom.Document;
@@ -18,9 +19,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.cityguide.adapter.CustomList;
+import com.example.cityguide.communication.JSONParser;
 import com.example.cityguide.entity.Place;
-import com.example.cityguide.others.CustomList;
-import com.example.cityguide.others.JSONParser;
+import com.example.cityguide.managerpackage.PlaceResponseManager;
 
 public class MenuActivity extends DrawerActivity {
 
@@ -30,6 +32,9 @@ public class MenuActivity extends DrawerActivity {
 	static LocationManager locationmanger;
 	JSONParser parser = new JSONParser();
 	static Document mapDoc;
+	static Context menuActivityContext;
+	
+	private static final String MENU_ACTIIVTY_TAG = "menu_activity_log";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,7 @@ public class MenuActivity extends DrawerActivity {
 
 		Intent i = getIntent();
 		type = i.getStringExtra("Type");
+		menuActivityContext = getApplicationContext();
 
 		type= HomeActivity.getType();
 		
@@ -53,7 +59,9 @@ public class MenuActivity extends DrawerActivity {
 	//	Log.i("response type", type);
 		menuList = (ListView) findViewById(R.id.listView1);
 		
-		places = SplashScreen.getAllPlaces();
+		places = getAllPlaces();
+		
+		Log.d(MENU_ACTIIVTY_TAG, "\nMenu Activity places: \n: "+places.toString());
 		menuList.setAdapter(new CustomList(MenuActivity.this, places,locationmanger));
 		
 		menuList.setOnItemClickListener(new OnItemClickListener() {
@@ -79,6 +87,19 @@ public class MenuActivity extends DrawerActivity {
 
 		
 	}//End onCreate()
+	
+	public  ArrayList<Place> getAllPlaces() {
+		List<Place> sqlitePlaces = new PlaceResponseManager().getAllPlacesFomSqliteDB(menuActivityContext);
+		ArrayList<Place> places = new ArrayList<Place>();
+		for(Place p: sqlitePlaces){
+			places.add(p);
+		}
+		
+		Log.i(MENU_ACTIIVTY_TAG, "get all Place from sqlite, size: "+places.size());
+		Log.w(MENU_ACTIIVTY_TAG, "\nget all Place from sqlite: "+places.toString());
+		return  places;
+
+	}
 	
 	
 

@@ -1,6 +1,6 @@
 package com.example.cityguide;
 
-import com.example.cityguide.others.TabsPagerAdapter;
+import com.example.cityguide.adapter.TabsPagerAdapter;
 import com.example.cityguide.R;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;

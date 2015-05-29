@@ -1,0 +1,88 @@
+package com.example.cityguide.utils;
+
+import java.io.File;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.provider.Settings;
+import android.util.Log;
+
+import com.example.cityguide.HomeActivity;
+import com.example.cityguide.SplashScreen;
+import com.example.cityguide.VerificationActivity;
+import com.example.cityguide.others.DatabaseHandler;
+
+public class Utils {
+
+	private static String NUMBER_PREFERENCES_FILE = "/data/data/com.example.cityguide/shared_prefs/profile.xml";
+	static File registrationFile;
+	private final static String UTILS_TAG = "utils_log";
+
+	public static void showSettingsAlert(final Context mContext) {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+
+		// Setting Dialog Title
+		alertDialog.setTitle("GPS  settings");
+
+		// Setting Dialog Message
+		alertDialog
+				.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+
+		// On pressing Settings button
+		alertDialog.setPositiveButton("Settings",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						Intent intent = new Intent(
+								Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+						mContext.startActivity(intent);
+					}
+				});
+
+		// on pressing cancel button
+		alertDialog.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+
+		// Showing Alert Message
+		alertDialog.show();
+	}
+
+	// -----------end function
+
+	public static void isUserRegistered(Context context) {
+
+		registrationFile = new File(NUMBER_PREFERENCES_FILE);
+
+		if ((registrationFile.exists())) {
+			DatabaseHandler db = new DatabaseHandler(context);
+
+			SharedPreferences pref = context.getSharedPreferences("profile",
+					Context.MODE_PRIVATE);
+			String number = pref.getString("phone", "default value");
+			int valid = db.checkActivation(number);
+			Log.i(UTILS_TAG, valid + " : registered user");
+			if (valid > 0) {
+				Intent i = new Intent(context, HomeActivity.class);
+				context.startActivity(i);
+				((Activity) context).finish();
+			}// end if user has verified number
+			else {
+				Intent i = new Intent(context, VerificationActivity.class);
+				context.startActivity(i);
+				((Activity) context).finish();
+			}// End else user is registered but has not verify number
+
+			
+		}// end if preference file is found
+		
+	}
+
+	// ----------end function
+}// End class Utils

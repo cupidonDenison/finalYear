@@ -9,8 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.cityguide.R;
+import com.example.cityguide.communication.JSONParser;
 import com.example.cityguide.entity.Place;
-import com.example.cityguide.others.JSONParser;
 import com.google.gson.Gson;
 
 import android.app.ActionBar;

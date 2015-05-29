@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.example.cityguide.others.ListAdapter;
+import com.example.cityguide.adapter.ListAdapter;
 import com.example.cityguide.R;
 
 import android.app.AlertDialog;

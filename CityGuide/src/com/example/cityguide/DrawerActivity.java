@@ -1,7 +1,7 @@
 package com.example.cityguide;
 
 
-import com.example.cityguide.others.ListViewImage;
+import com.example.cityguide.adapter.ListViewImage;
 import com.example.cityguide.R;
 
 import android.app.Activity;

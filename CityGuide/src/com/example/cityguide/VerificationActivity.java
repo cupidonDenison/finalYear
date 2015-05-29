@@ -7,8 +7,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-import com.example.cityguide.others.DatabaseHandler;
-import com.example.cityguide.others.JSONParser;
+import com.example.cityguide.communication.JSONParser;
+import com.example.cityguide.sqlitehandler.DatabaseHandler;
 import com.example.cityguide.R;
 
 import android.app.Activity;
@@ -34,7 +34,7 @@ public class VerificationActivity extends Activity {
 	String result;
 
 	private static final String numberURL = SplashScreen.SERVER_IP+"project/verifyNumber.php";
-	private static String NUMBER_PREFERENCES_FILE = "/data/data/com.example.cityguide/shared_prefs/number";
+	//private static String NUMBER_PREFERENCES_FILE = "/data/data/com.example.cityguide/shared_prefs/profile";
 	String number, codeText;
 
 	EditText codeEditText;
@@ -47,7 +47,7 @@ public class VerificationActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_verification);
 
-		SharedPreferences pref = getSharedPreferences("number",
+		SharedPreferences pref = getSharedPreferences("profile",
 				Context.MODE_PRIVATE);
 
 		number = pref.getString("phone", "default value");

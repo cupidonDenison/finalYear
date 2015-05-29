@@ -1,8 +1,8 @@
 package com.example.cityguide;
 
 
-import com.example.cityguide.others.Clist;
-import com.example.cityguide.others.CustomList;
+import com.example.cityguide.adapter.Clist;
+import com.example.cityguide.adapter.CustomList;
 
 import android.app.Activity;
 import android.os.Bundle;

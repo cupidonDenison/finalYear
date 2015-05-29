@@ -1,0 +1,7 @@
+package com.example.cityguide.callbackinterface;
+
+public interface ProfileInterface {
+
+	
+	public void checkRegistration(String registrationStatus);
+}//End  interface

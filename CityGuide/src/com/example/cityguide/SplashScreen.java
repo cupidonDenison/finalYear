@@ -1,7 +1,7 @@
 package com.example.cityguide;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,26 +13,31 @@ import android.util.Log;
 import android.widget.RelativeLayout;
 
 import com.example.cityguide.callbackinterface.PlaceResponseListener;
-import com.example.cityguide.callbackinterface.PlaceResponseManager;
+import com.example.cityguide.callbackinterface.ProfileInterface;
 import com.example.cityguide.entity.Place;
 import com.example.cityguide.location.MyLocation;
+import com.example.cityguide.managerpackage.PlaceResponseManager;
+import com.example.cityguide.managerpackage.ProfileManager;
 
 public class SplashScreen extends Activity {
 
-	public static final String SERVER_IP = "http://192.168.1.7/";
+	public static final String SERVER_IP = "http://192.168.1.9/";
 	// public static final String SERVER_IP = "http://192.168.1.4/";
 	// public static final String SERVER_IP =
 	// "http://www.denisonspace.herobo.com/";
 
 	public static Context appcontext;
-	private static int SPLASH_TIME_OUT = 3000;
-	private static String NUMBER_PREFERENCES_FILE = "/data/data/com.example.cityguide/shared_prefs/number.xml";
-	static File f;
+	// private static int SPLASH_TIME_OUT = 3000;
+
 	public static Location myLocation;
 	LocationManager locationManager;
-	private final String SPLASH_TAG = "splash_log";
+	private final static String SPLASH_TAG = "splash_log";
 	static RelativeLayout progressLayout;
 	private static ArrayList<Place> allPlaces;
+
+	private static int userStatus = -1;
+	
+	private static boolean loadPlace = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +46,7 @@ public class SplashScreen extends Activity {
 		getActionBar().hide();
 
 		appcontext = getApplicationContext();
-	
-		
+
 		Log.i(SPLASH_TAG, "Splash screen launch");
 
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -58,59 +62,105 @@ public class SplashScreen extends Activity {
 					@Override
 					public void getPlace(ArrayList<Place> response) {
 
-						try {
-							findViewById(R.id.loadingPanel).setVisibility(RelativeLayout.GONE);
-						} catch (Exception e) {
-							Log.e(SPLASH_TAG, "loading error", e);
-						}
+						
 						allPlaces = response;
 
-						Log.i(SPLASH_TAG, "Place size: " + allPlaces.size());
+						//Store all places to sqlite
+					
 						
-						Intent i = new Intent(SplashScreen.this, RegistrationActivity.class);
-						startActivity(i);
+						
+						Log.i(SPLASH_TAG, "Place size: " + allPlaces.size());
+						loadPlace = true;
 
+						/*
+						 * Intent i = new Intent(SplashScreen.this,
+						 * RegistrationActivity.class); startActivity(i);
+						 */
+						
+					
+						
+						//To run the code on the ui thread
+						runOnUiThread(new Runnable() {
+							
+							@Override
+							public void run() {
+
+								int createSqliteRecord = new PlaceResponseManager().storePlace(appcontext, allPlaces);
+								Log.i(SPLASH_TAG, "Record added to sqlite: " + createSqliteRecord);
+								checkProfile();
+								
+							}
+						});
+						
+						//End runOnUiThread()
+						
+						
+						
+						try {
+							findViewById(R.id.loadingPanel).setVisibility(
+									RelativeLayout.GONE);
+						} catch (Exception e) {
+							Log.e("Dialog loading error", "loading error", e);
+						}
 					}
-				});
-
+				});// -------end call to get places
+		
+		
 		
 
-		/*
-		 * new Handler().postDelayed(new Runnable() {
-		 * 
-		 * @Override public void run() { f = new File(NUMBER_PREFERENCES_FILE);
-		 * 
-		 * if ((f.exists())) { DatabaseHandler db = new DatabaseHandler(
-		 * getApplicationContext());
-		 * 
-		 * SharedPreferences pref = getSharedPreferences("number",
-		 * Context.MODE_PRIVATE);
-		 * 
-		 * String number = pref.getString("phone", "default value"); int valid =
-		 * db.checkActivation(number);
-		 * 
-		 * Log.i("Sql verification", valid+"");
-		 * 
-		 * if (valid > 0) { Intent i = new Intent(SplashScreen.this,
-		 * HomeActivity.class); startActivity(i);
-		 * 
-		 * finish(); } else { Intent i = new Intent(SplashScreen.this,
-		 * VerificationActivity.class); startActivity(i);
-		 * 
-		 * finish(); }//end if-else statement if verification is ok } else {
-		 * Intent i = new Intent(SplashScreen.this, RegistrationActivity.class);
-		 * startActivity(i);
-		 * 
-		 * finish(); }//end if statment number is set }//end run() },
-		 * SPLASH_TIME_OUT);
-		 */
 	}// end onCreate()
 
-	
-	
+	public void checkProfile() {
 
-	public static ArrayList<Place> getAllPlaces() {
-		return allPlaces;
+		ProfileManager.checkProfileRegistration(appcontext,
+				new ProfileInterface() {
+
+					@Override
+					public void checkRegistration(int registrationStatus) {
+
+						Log.i(SPLASH_TAG, "registration status: "
+								+ registrationStatus);
+						userStatus = registrationStatus;
+
+						switch (userStatus) {
+						case -1:
+							Intent i = new Intent(appcontext,
+									RegistrationActivity.class);
+							startActivity(i);
+							finish();
+							break;
+						case 0:
+							Intent i1 = new Intent(appcontext,
+									VerificationActivity.class);
+							startActivity(i1);
+							finish();
+
+							break;
+						case 1:
+							Intent i2 = new Intent(appcontext,
+									HomeActivity.class);
+							startActivity(i2);
+							finish();
+
+							break;
+
+						default:
+							break;
+						}// End switch
+
+					}// end checkRegistration()
+				});// End checkProfileRegistration
+
+		// -------end call to verify contact
 
 	}
+	
+	//----end function
+
+	public static ArrayList<Place> getAllPlaces() {
+		
+		return  allPlaces;
+
+	}
+	
 }// end Activity

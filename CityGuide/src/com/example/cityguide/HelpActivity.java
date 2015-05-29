@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.example.cityguide.R;
-import com.example.cityguide.others.HelpAdapter;
+import com.example.cityguide.adapter.HelpAdapter;
 
 
 import android.content.Context;

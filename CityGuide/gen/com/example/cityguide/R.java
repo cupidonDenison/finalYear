@@ -666,6 +666,7 @@ containing a value of this type.
     }
     public static final class raw {
         public static final int gtm_analytics=0x7f040000;
+        public static final int ormlite_config=0x7f040001;
     }
     public static final class string {
         public static final int Ok=0x7f060048;
