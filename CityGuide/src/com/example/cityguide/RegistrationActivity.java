@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.cityguide.communication.JSONParser;
+import com.example.cityguide.utils.Utils;
 import com.example.cityguide.R;
 
 import android.app.Activity;
@@ -37,7 +38,7 @@ import android.widget.Toast;
 public class RegistrationActivity extends Activity {
 
 	private static final String numberURL = SplashScreen.SERVER_IP+"project/addNumber.php";
-	private static String NUMBER_PREFERENCES_FILE = "/data/data/com.example.cityguide/shared_prefs/number.xml";
+	private static final String REGISTRATION_TAG = "registration_log";
 	
 	private static String result;
 	ImageButton mainBtn;
@@ -156,11 +157,13 @@ public class RegistrationActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... arg0) {
 			JSONParser parser = new JSONParser();
-			
+			String deviceId = Utils.getStoreDDeviceId(getApplicationContext());
+			Log.d(REGISTRATION_TAG, "device id:"+deviceId);
 			// Building Parameters
 			List<NameValuePair> details = new ArrayList<NameValuePair>();
 			details.add(new BasicNameValuePair("number", num));
 			details.add(new BasicNameValuePair("name", name));
+			details.add(new BasicNameValuePair("device_id", deviceId));
 
 			// getting JSON Object
             // Note that url accepts POST method
@@ -190,8 +193,11 @@ public class RegistrationActivity extends Activity {
 				
 				SharedPreferences.Editor preferencesEditor = numberPref.edit();
 				preferencesEditor.putString("phone", num);
+				preferencesEditor.putBoolean("verify", false);
+				preferencesEditor.putBoolean("isregistered", true);
 				preferencesEditor.commit();
 				
+				Log.d(REGISTRATION_TAG, "isRegistered: "+numberPref.getBoolean("isregistered", false));
 				
 				Intent positveActivity = new Intent(
 						getApplicationContext(), VerificationActivity.class);

@@ -1,0 +1,10 @@
+package com.example.cityguide.managerpackage;
+
+public class GCMManager {
+	
+	public void registerdevice(){
+		
+	}
+	//-------end registerDevice()
+
+}//End class

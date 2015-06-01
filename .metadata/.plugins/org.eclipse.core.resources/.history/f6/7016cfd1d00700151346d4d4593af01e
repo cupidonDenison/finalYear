@@ -1,0 +1,32 @@
+package com.example.cityguide.managerpackage;
+
+import java.io.IOException;
+
+import android.content.Context;
+import android.util.Log;
+
+import com.example.cityguide.callbackinterface.GCMInterface;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+public class GCMManager {
+	private static final String SENDER_ID = "609320741786";
+	private final String GCM_TAG = "gcm_log":
+
+	public void registerDevice(Context context, GCMInterface gcmInterface) {
+		String registrationId = "";
+
+		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
+		try {
+			registrationId = gcm.register(SENDER_ID);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Log.d("", "registration id: "+registrationId);
+		gcmInterface.getRegistrationId(registrationId);
+
+	}
+	// -------end registerDevice()
+
+}// End class

@@ -1,0 +1,6 @@
+package com.example.cityguide.callbackinterface;
+
+public interface GCMInterface {
+
+	public void getRegistrationId();
+}//End interfeace

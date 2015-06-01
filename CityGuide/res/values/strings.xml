@@ -24,7 +24,7 @@
     <string name="title_activity_menu">Places</string>
     <string name="itemName">Name</string>
     <string name="itemLocation">Location</string>
-    <string name="title_activity_start_up">Verify your phone number</string>
+    <string name="title_activity_start_up">Registration</string>
     <string name="startUp_msg">We will send an SMS Message to verify your phone number \n\nSMS Charges May apply \n</string>
     <string name="hello_worldRed"><font fgcolor="#0000FF">Hello world!</font></string>
     <string name="phone_confirm">Enter Your Phone number :</string>
@@ -58,10 +58,11 @@
     <string name="title_activity_favorites">Favorite Places</string>
     <string name="dialog">Profile Photo</string>
     <string name="preferences">Set Preferences</string>
-     <string name="menu_details_activity_placeName">Place Name</string>
+    <string name="menu_details_activity_placeName">Place Name</string>
     <string name="menu_details_activity_address">Address</string>
     <string name="menu_detail_activity_contentDesc">image view</string>
-     <string name="menu_detail_activity_distance">distance</string>
-     <string name="menu_detail_activity_button">Find Place</string>
+    <string name="menu_detail_activity_distance">distance</string>
+    <string name="menu_detail_activity_button">Find Place</string>
+    <string name="title_activity_meeting_request">Meeting Request</string>
 
 </resources>

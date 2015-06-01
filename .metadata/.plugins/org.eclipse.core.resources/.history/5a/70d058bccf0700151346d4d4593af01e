@@ -1,0 +1,14 @@
+package com.example.cityguide.managerpackage;
+
+import android.content.Context;
+
+import com.example.cityguide.callbackinterface.GCMInterface;
+
+public class GCMManager {
+	
+	public void registerdevice(Context context,GCMInterface gcmInterface){
+		
+	}
+	//-------end registerDevice()
+
+}//End class

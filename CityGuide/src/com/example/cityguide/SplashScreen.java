@@ -6,25 +6,33 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.RelativeLayout;
 
+import com.example.cityguide.callbackinterface.GCMInterface;
 import com.example.cityguide.callbackinterface.PlaceResponseListener;
 import com.example.cityguide.callbackinterface.ProfileInterface;
 import com.example.cityguide.entity.Place;
 import com.example.cityguide.location.MyLocation;
+import com.example.cityguide.managerpackage.GCMManager;
 import com.example.cityguide.managerpackage.PlaceResponseManager;
 import com.example.cityguide.managerpackage.ProfileManager;
+import com.example.cityguide.utils.Utils;
 
 public class SplashScreen extends Activity {
 
-	public static final String SERVER_IP = "http://192.168.1.9/";
+	public static final String SERVER_IP = "http://192.168.1.4/";
 	// public static final String SERVER_IP = "http://192.168.1.4/";
 	// public static final String SERVER_IP =
 	// "http://www.denisonspace.herobo.com/";
+
+	public static boolean isGooglePlayServicesAvailable = false;
+
+	private static String DEVICE_ID = "";
 
 	public static Context appcontext;
 	// private static int SPLASH_TIME_OUT = 3000;
@@ -36,8 +44,10 @@ public class SplashScreen extends Activity {
 	private static ArrayList<Place> allPlaces;
 
 	private static int userStatus = -1;
-	
+
 	private static boolean loadPlace = false;
+	
+	public static boolean isUserRegistered ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,46 +66,62 @@ public class SplashScreen extends Activity {
 			Log.i(SPLASH_TAG, "latitude: " + myLocation.getLatitude());
 		}
 
+		isGooglePlayServicesAvailable = Utils.checkPlayServices(this);
+
+		SharedPreferences pref = getSharedPreferences("profile",
+				Context.MODE_PRIVATE);
+
+		boolean isRegistered = pref.getBoolean("isregistered", false);
+		
+		Log.d(SPLASH_TAG, "isRegistered: " + isRegistered);
+		Log.d(SPLASH_TAG, "Number: "+pref.getString("phone", "my number"));
+		
+		isUserRegistered = isRegistered;
+
+		if (!isRegistered) {
+			if (isGooglePlayServicesAvailable) {
+				GCMManager.registerDevice(this, new GCMInterface() {
+
+					@Override
+					public void getRegistrationId(String registration_id) {
+						DEVICE_ID = registration_id;
+						Log.d(SPLASH_TAG, "\n\n\n\n Device Id:" + DEVICE_ID);
+						
+						Utils.storeDeviceId(appcontext, DEVICE_ID);
+					}// get RegistrationId()
+				});
+			}// End if device support google play services
+		}
+
+		
 		PlaceResponseManager.getPlaces(this, "all",
 				new PlaceResponseListener() {
 
 					@Override
 					public void getPlace(ArrayList<Place> response) {
 
-						
 						allPlaces = response;
 
-						//Store all places to sqlite
-					
-						
-						
 						Log.i(SPLASH_TAG, "Place size: " + allPlaces.size());
 						loadPlace = true;
 
-						/*
-						 * Intent i = new Intent(SplashScreen.this,
-						 * RegistrationActivity.class); startActivity(i);
-						 */
-						
-					
-						
-						//To run the code on the ui thread
+						// To run the code on the ui thread
 						runOnUiThread(new Runnable() {
-							
+
 							@Override
 							public void run() {
 
-								int createSqliteRecord = new PlaceResponseManager().storePlace(appcontext, allPlaces);
-								Log.i(SPLASH_TAG, "Record added to sqlite: " + createSqliteRecord);
+								int createSqliteRecord = new PlaceResponseManager()
+										.storePlace(appcontext, allPlaces);
+								Log.i(SPLASH_TAG, "Record added to sqlite: "
+										+ createSqliteRecord);
 								checkProfile();
-								
+
 							}
 						});
-						
-						//End runOnUiThread()
-						
-						
-						
+
+						// End runOnUiThread()
+
 						try {
 							findViewById(R.id.loadingPanel).setVisibility(
 									RelativeLayout.GONE);
@@ -104,9 +130,6 @@ public class SplashScreen extends Activity {
 						}
 					}
 				});// -------end call to get places
-		
-		
-		
 
 	}// end onCreate()
 
@@ -154,13 +177,13 @@ public class SplashScreen extends Activity {
 		// -------end call to verify contact
 
 	}
-	
-	//----end function
+
+	// ----end function
 
 	public static ArrayList<Place> getAllPlaces() {
-		
-		return  allPlaces;
+
+		return allPlaces;
 
 	}
-	
+
 }// end Activity

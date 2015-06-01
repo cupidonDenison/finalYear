@@ -1,7 +1,5 @@
 package com.example.cityguide.utils;
 
-import java.io.File;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,15 +9,14 @@ import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.example.cityguide.HomeActivity;
-import com.example.cityguide.RegistrationActivity;
-import com.example.cityguide.VerificationActivity;
-import com.example.cityguide.sqlitehandler.DatabaseHandler;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class Utils {
 
 	
 	private final static String UTILS_TAG = "utils_log";
+	 private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
 	public static void showSettingsAlert(final Context mContext) {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
@@ -54,8 +51,48 @@ public class Utils {
 	}
 
 	// -----------end function
-
 	
+	//Check if google play services is available
+	
+	public static  boolean checkPlayServices(Context context) {
+	    int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
+	    if (resultCode != ConnectionResult.SUCCESS) {
+	        if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+	            GooglePlayServicesUtil.getErrorDialog(resultCode, (Activity) context,
+	                    PLAY_SERVICES_RESOLUTION_REQUEST).show();
+	        } else {
+	            Log.i(UTILS_TAG, "This device is not supported.");
+	           
+	        }
+	        return false;
+	    }else{
+	    	Log.i(UTILS_TAG,"Google play services available");
+	    }
+	    return true;
+	}//End checkPlayServices
 
 	// ----------end function
+	
+	public static void storeDeviceId(Context context,String deviceId){
+		SharedPreferences numberPref = context.getSharedPreferences(
+				"profile",
+				Context.MODE_PRIVATE);
+		
+		SharedPreferences.Editor preferencesEditor = numberPref.edit();
+		preferencesEditor.putString("device_id", deviceId);
+		preferencesEditor.putBoolean("isregistered", false);
+		preferencesEditor.commit();
+		
+	}
+	//End function
+	
+	
+	public static String getStoreDDeviceId(Context context){
+		String deviceId ="";
+		SharedPreferences pref = context.getSharedPreferences("profile",
+				Context.MODE_PRIVATE);
+
+		deviceId = pref.getString("device_id", "default value");
+		return deviceId;
+	}
 }// End class Utils

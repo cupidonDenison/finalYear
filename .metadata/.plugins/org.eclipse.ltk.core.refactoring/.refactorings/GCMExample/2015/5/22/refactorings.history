@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy 2 elements to &apos;CityGuide/src/com.example.cityguide.pushnotification&apos;&#x0D;&#x0A;- Original project: &apos;GCMExample&apos;&#x0D;&#x0A;- Destination element: &apos;CityGuide/src/com.example.cityguide.pushnotification&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     com.example.gcmexample.GcmBroadcastReceiver.java&#x0D;&#x0A;     com.example.gcmexample.GcmIntentService.java" description="Copy compilation units" destination="=CityGuide/src&lt;com.example.cityguide.pushnotification" element1="/src&lt;com.example.gcmexample{GcmBroadcastReceiver.java" element2="/src&lt;com.example.gcmexample{GcmIntentService.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1433114073650" units="2" version="1.0"/>
+</session>

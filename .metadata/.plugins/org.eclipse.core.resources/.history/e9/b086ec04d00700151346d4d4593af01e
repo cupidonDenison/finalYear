@@ -1,0 +1,19 @@
+package com.example.cityguide.managerpackage;
+
+import android.content.Context;
+
+import com.example.cityguide.callbackinterface.GCMInterface;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+public class GCMManager {
+	
+	public void registerdevice(Context context,GCMInterface gcmInterface){
+		String senderId ="";
+		
+		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
+		gcm.register(senderId);
+		
+	}
+	//-------end registerDevice()
+
+}//End class

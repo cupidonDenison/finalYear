@@ -133,6 +133,14 @@ public class VerificationActivity extends Activity {
 				
 				db.createRecord(number);
 				
+				SharedPreferences numberPref = getSharedPreferences(
+						"profile",
+						Context.MODE_PRIVATE);
+				
+				SharedPreferences.Editor preferencesEditor = numberPref.edit();
+				preferencesEditor.putBoolean("verify", true);
+				preferencesEditor.commit();
+				
 				Intent m = new Intent(getApplicationContext(),
 						HomeActivity.class);
 				VerificationActivity.this.finish();

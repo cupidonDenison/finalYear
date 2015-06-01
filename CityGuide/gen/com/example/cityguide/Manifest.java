@@ -9,6 +9,7 @@ package com.example.cityguide;
 
 public final class Manifest {
     public static final class permission {
+        public static final String C2D_MESSAGE="com.example.cityguide.permission.C2D_MESSAGE";
         public static final String MAPS_RECEIVE="com.example.cityguide.permission.MAPS_RECEIVE";
     }
 }
